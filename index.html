@@ -1,572 +1,962 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" type="image/png" href="./images/favicon.png" />
-
     <title>Sajidan | Portfolio</title>
+    <meta name="description" content="Web Developer | Back-end Developer | Cloud Computing" />
 
-    <meta name="description" content="Add small description of yourslef." />
-    <meta name="keywords" content="node.js, JavaScript, hapi.js" />
-    <link rel="stylesheet" href="index.css" />
-  </head>
+    <!-- Google Fonts for Futuristic Look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
 
-  <body>
-    <!-- ***** Header ***** -->
+    <!-- Lucide Icons (Modern SVG Icons) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-    <header class="header" role="banner" id="top">
-      <div class="row">
-        <nav class="nav" role="navigation" id="navbar">
-          <ul class="nav__items">
-            <li class="nav__item">
-              <a href="#work" class="nav__link">Work</a>
-            </li>
-            <li class="nav__item">
-              <a href="#skills" class="nav__link">Skills</a>
-            </li>
-            <li class="nav__item">
-              <a href="#about" class="nav__link">About</a>
-            </li>
-            <li class="nav__item">
-              <a href="#contact" class="nav__link">Contact</a>
-            </li>
-          </ul>
+    <style>
+        /* --------------------------------------- */
+        /* ----- CORE VARIABLES & RESET ----- */
+        /* --------------------------------------- */
+        :root {
+            --primary: #ff3258;
+            --primary-glow: rgba(255, 50, 88, 0.5);
+            --bg-dark: #050505;
+            --bg-card: rgba(20, 20, 20, 0.6);
+            --text-main: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --font-heading: 'Space Grotesk', sans-serif;
+            --font-body: 'Jost', sans-serif;
+            --container-width: 1200px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* Hide default cursor for custom one */
+        }
+
+        html {
+            font-size: 62.5%;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-size: 1.8rem;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --------------------------------------- */
+        /* ----- CUSTOM CURSOR ----- */
+        /* --------------------------------------- */
+        .cursor-dot,
+        .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary);
+        }
+
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--primary);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+
+        /* Hover effect for cursor */
+        body.hovering .cursor-outline {
+            background-color: rgba(255, 50, 88, 0.1);
+            width: 60px;
+            height: 60px;
+            border-color: #fff;
+        }
+
+        /* --------------------------------------- */
+        /* ----- BACKGROUND PARTICLES ----- */
+        /* --------------------------------------- */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
+        }
+
+        /* --------------------------------------- */
+        /* ----- UTILITIES & ANIMATIONS ----- */
+        /* --------------------------------------- */
+        .row {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 4rem;
+            margin-bottom: 5rem;
+            position: relative;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .highlight { color: var(--primary); }
+
+        /* Scroll Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --------------------------------------- */
+        /* ----- HEADER & NAV ----- */
+        /* --------------------------------------- */
+        .header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem 0;
+            z-index: 100;
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            transition: all 0.3s;
+        }
+
+        .nav__items {
+            display: flex;
+            justify-content: flex-end;
+            list-style: none;
+            gap: 4rem;
+        }
+
+        .nav__link {
+            text-decoration: none;
+            color: var(--text-main);
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav__link:hover { color: var(--primary); }
+
+        .nav__link::before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav__link:hover::before { width: 100%; }
+
+        /* Hero Section */
+        .hero-content {
+            padding-top: 8rem;
+        }
+
+        .heading-primary {
+            font-family: var(--font-heading);
+            font-size: 7rem;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            font-weight: 700;
+        }
+
+        .heading-primary span {
+            display: block;
+            background: linear-gradient(to right, #fff, #aaa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .typing-container {
+            font-size: 2.4rem;
+            color: var(--primary);
+            font-family: 'Courier New', monospace;
+            margin-bottom: 4rem;
+            min-height: 3rem;
+        }
+
+        .cursor-blink {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .btn {
+            display: inline-block;
+            padding: 1.2rem 4rem;
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            font-family: var(--font-heading);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            z-index: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            z-index: -1;
+            transition: left 0.3s ease-in-out;
+        }
+
+        .btn:hover { color: #fff; box-shadow: 0 0 20px var(--primary-glow); }
+        .btn:hover::before { left: 0; }
+
+        /* --------------------------------------- */
+        /* ----- WORK (Projects) ----- */
+        /* --------------------------------------- */
+        section { padding: 10rem 0; }
+
+        .work__grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 4rem;
+        }
+
+        /* 3D Tilt Card */
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 3rem;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+            transition: transform 0.1s ease; /* Fast for JS tilt */
+            backdrop-filter: blur(5px);
+        }
+
+        .project-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+        }
+
+        .project-card__image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+            background: #222; /* Placeholder color */
+        }
+
+        .project-card:hover .project-card__image { opacity: 1; }
+
+        .project-card h3 {
+            font-family: var(--font-heading);
+            font-size: 2.4rem;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+
+        .project-card p {
+            color: var(--text-muted);
+            font-size: 1.6rem;
+            margin-bottom: 2rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .tech-tag {
+            font-size: 1.2rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            color: var(--primary);
+            font-family: monospace;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 2rem;
+            margin-top: auto;
+        }
+
+        .icon-link {
+            color: #fff;
+            transition: color 0.3s, transform 0.3s;
+        }
+        .icon-link:hover {
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        /* --------------------------------------- */
+        /* ----- SKILLS ----- */
+        /* --------------------------------------- */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .skill-badge {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 1.5rem 2.5rem;
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .skill-badge:hover {
+            border-color: var(--primary);
+            background: rgba(255, 50, 88, 0.05);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 50, 88, 0.1);
+        }
+
+        .skill-badge span {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 500;
+        }
+
+        .skill-badge svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--primary);
+        }
+
+        /* --------------------------------------- */
+        /* ----- ABOUT ----- */
+        /* --------------------------------------- */
+        .about__wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+        }
+
+        .about__text p {
+            margin-bottom: 3rem;
+            font-size: 1.9rem;
+            color: var(--text-muted);
+        }
+
+        .about__image-container {
+            position: relative;
+        }
+
+        .about__image {
+            width: 100%;
+            border-radius: 20px;
+            filter: grayscale(100%);
+            transition: filter 0.5s;
+            position: relative;
+            z-index: 2;
+        }
+
+        .about__image-container:hover .about__image { filter: grayscale(0%); }
+
+        /* Decor behind image */
+        .about__image-container::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            z-index: 1;
+            transition: transform 0.3s;
+        }
+
+        .about__image-container:hover::before { transform: translate(10px, 10px); }
+
+        /* --------------------------------------- */
+        /* ----- CONTACT & FOOTER ----- */
+        /* --------------------------------------- */
+        .contact {
+            text-align: center;
+        }
+
+        .contact p {
+            max-width: 600px;
+            margin: 0 auto 4rem;
+            color: var(--text-muted);
+        }
+
+        .footer {
+            padding: 5rem 0;
+            text-align: center;
+            border-top: 1px solid var(--glass-border);
+            margin-top: 5rem;
+            font-size: 1.4rem;
+            color: var(--text-muted);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-links a {
+            color: #fff;
+            transition: color 0.3s;
+        }
+        .social-links a:hover { color: var(--primary); }
+
+        /* Back to top */
+        .back-to-top {
+            position: fixed;
+            bottom: 3rem;
+            right: 3rem;
+            width: 50px;
+            height: 50px;
+            background: var(--bg-card);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 90;
+            color: var(--primary);
+        }
+
+        .back-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* --------------------------------------- */
+        /* ----- RESPONSIVE ----- */
+        /* --------------------------------------- */
+        @media (max-width: 900px) {
+            .heading-primary { font-size: 5rem; }
+            .about__wrapper { grid-template-columns: 1fr; }
+            .nav { justify-content: center; }
+            .nav__items { justify-content: center; font-size: 1.4rem; gap: 2rem; }
+        }
+
+        @media (max-width: 600px) {
+            .heading-primary { font-size: 4rem; }
+            .work__grid { grid-template-columns: 1fr; }
+            .section-title { font-size: 3rem; }
+            .cursor-dot, .cursor-outline { display: none; } /* Disable custom cursor on mobile */
+            * { cursor: auto; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Canvas for Particles -->
+    <canvas id="particles-js"></canvas>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- Header -->
+    <header class="header" id="top">
+        <nav class="nav">
+            <div class="row">
+                <ul class="nav__items">
+                    <li><a href="#work" class="nav__link">Work</a></li>
+                    <li><a href="#skills" class="nav__link">Skills</a></li>
+                    <li><a href="#about" class="nav__link">About</a></li>
+                    <li><a href="#contact" class="nav__link">Contact</a></li>
+                </ul>
+            </div>
         </nav>
-      </div>
-      <div class="header__text-box row">
-        <div class="header__text">
-          <h1 class="heading-primary">
-            <span>Ahmad Nur Sajidan</span>
-          </h1>
-          <p>Web Developer | Back-end Developer | Cloud Computing</p>
-          <a href="#contact" class="btn btn--pink">Get in touch</a>
+
+        <div class="row hero-content reveal">
+            <h1 class="heading-primary">
+                Hello, I'm
+                <span>Ahmad Nur Sajidan</span>
+            </h1>
+            <div class="typing-container">
+                <span class="typing-text"></span><span class="cursor-blink">|</span>
+            </div>
+            <a href="#contact" class="btn">Initialize Contact</a>
         </div>
-      </div>
     </header>
 
-    <main role="main">
-      <!-- ***** Work ***** -->
+    <main>
+        <!-- Work Section -->
+        <section id="work">
+            <div class="row">
+                <h2 class="section-title reveal">My <span class="highlight">Projects</span></h2>
 
-      <section class="work" id="work">
-        <div class="row">
-          <h2>My Work</h2>
-          <div class="work__boxes">
-            <!-- Each div with the work__box class is a project. -->
+                <div class="work__grid">
+                    <!-- Project 1 -->
+                    <div class="project-card reveal">
+                        <!-- Using placeholder as local image won't load in preview -->
+                        <div class="project-card__image" style="background: url('images/assadah.png') center/cover;"></div>
+                        <h3>MI Assa’adah AIS</h3>
+                        <p>Web-based school portal & online admission system with RBAC for Admin, Teachers, and Parents. Developed using Waterfall methodology & IEEE standards.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">React.js</span>
+                            <span class="tech-tag">Golang</span>
+                            <span class="tech-tag">PostgreSQL</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="http://35.209.3.143" target="_blank" class="icon-link" title="Live Site"><i data-lucide="external-link"></i></a>
+                            <a href="https://github.com/STIPENDEV" target="_blank" class="icon-link" title="GitHub"><i data-lucide="github"></i></a>
+                        </div>
+                    </div>
 
-            <div class="work__box">
-              <div class="work__text">
-                <h3>MI Assa’adah Academic Information System Website</h3>
-                <p>
-                  A web-based school portal and online student admission (PPDB) system designed
-                  to support end-to-end enrollment processes at MI Unggulan Assa’adah. The system
-                  consists of a public landing page for school information and an integrated PPDB
-                  platform that handles online registration, document submission, administrative
-                  verification, academic selection, class placement, and payment progress tracking.
-                  The project was developed based on a structured Software Requirements Specification
-                  (SRS) following IEEE standards and implemented with role-based access control for
-                  Admin, Teacher, and Parent users.
-                </p>
-                <ul class="work__list">
-                  <li>React.js</li>
-                  <li>Golang</li>
-                  <li>PostgreSQL</li>
-                  <li>RBAC</li>
-                  <li>Waterfall Methodology</li>
-                  <li>IEEE SRS</li>
-                </ul>
+                    <!-- Project 2 -->
+                    <div class="project-card reveal">
+                         <div class="project-card__image" style="background: url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&q=80') center/cover;"></div>
+                        <h3>AIoTinsight</h3>
+                        <p>IoT analytics platform analyzing simulation data from Wokwi. Provides actionable insights for energy optimization using AI predictive models.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">React</span>
+                            <span class="tech-tag">Golang</span>
+                            <span class="tech-tag">Hugging Face API</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/sajidannn/fcp-rg-ai" target="_blank" class="icon-link"><i data-lucide="external-link"></i></a>
+                            <a href="https://github.com/sajidannn/fcp-rg-ai" target="_blank" class="icon-link"><i data-lucide="github"></i></a>
+                        </div>
+                    </div>
 
-                <div class="work__links">
-                  <a
-                    href="http://35.209.3.143"
-                    class="link__text"
-                    target="_blank"
-                  >
-                    Visit Site <span>&rarr;</span>
-                  </a>
-                  <a
-                    href="https://github.com/STIPENDEV"
-                    title="View Source Code"
-                    target="_blank"
-                  >
-                    <img
-                      src="./images/github.svg"
-                      class="work__code"
-                      title="View Source Code"
-                      alt="GitHub"
-                    />
-                  </a>
+                    <!-- Project 3 -->
+                    <div class="project-card reveal">
+                        <div class="project-card__image" style="background: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=500&q=80') center/cover;"></div>
+                        <h3>Exni Asset Management</h3>
+                        <p>Corporate asset management backend. Facilitates tracking of vehicles, buildings, and leasing operations to streamline utilization.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Node.js</span>
+                            <span class="tech-tag">Express</span>
+                            <span class="tech-tag">PostgreSQL</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://exni.web.id/" target="_blank" class="icon-link"><i data-lucide="external-link"></i></a>
+                            <a href="https://exni.web.id/" target="_blank" class="icon-link"><i data-lucide="github"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Project 4 -->
+                    <div class="project-card reveal">
+                        <div class="project-card__image" style="background: url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=500&q=80') center/cover;"></div>
+                        <h3>Wound Detection AI</h3>
+                        <p>Python program using Active Contour and Mask Fill Poly techniques with Decision Tree classification for medical imaging analysis.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">OpenCV</span>
+                            <span class="tech-tag">Decision Tree</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://colab.research.google.com/drive/15QQ5NpK2WA9k0SeahLutFm3jNkz2oT1t?usp=sharing" target="_blank" class="icon-link"><i data-lucide="code"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Project 5 -->
+                    <div class="project-card reveal">
+                        <div class="project-card__image" style="background: url('https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=500&q=80') center/cover;"></div>
+                        <h3>Forum API</h3>
+                        <p>Clean architecture REST API implementation with JEST automation testing, CI/CD pipelines, and cloud deployment.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Hapi.js</span>
+                            <span class="tech-tag">AWS RDS/S3</span>
+                            <span class="tech-tag">GitHub Actions</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/sajidannn/Dicoding-BE-Expert" target="_blank" class="icon-link"><i data-lucide="github"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Project 6 -->
+                    <div class="project-card reveal">
+                        <div class="project-card__image" style="background: url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=500&q=80') center/cover;"></div>
+                        <h3>NeoSmart</h3>
+                        <p>Interactive learning platform designed to help children identify and dodge hoaxes/fake news on social media.</p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">HTML</span>
+                            <span class="tech-tag">CSS</span>
+                            <span class="tech-tag">JavaScript</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://neosmart2.netlify.app/" target="_blank" class="icon-link"><i data-lucide="external-link"></i></a>
+                            <a href="https://github.com/sajidannn/submission-dicoding-FE" target="_blank" class="icon-link"><i data-lucide="github"></i></a>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div class="work__image-box">
-                <img
-                  src="./images/assadah.png"
-                  class="work__image"
-                  alt="Project 3"
-                />
-              </div>
             </div>
+        </section>
 
-            <div class="work__box">
-              <div class="work__text">
-                <h3>AIoTinsight</h3>
-                <p>
-                  Platform to analyze IoT simulation data (e.g., energy
-                  consumption, room temperature, humidity) from Wokwi Simulator.
-                  The platform provides actionable insights and recommendations
-                  to optimize energy usage, leveraging AI models for predictive
-                  analysis and efficient energy management in smart homes.
-                </p>
-                <ul class="work__list">
-                  <li>React</li>
-                  <li>Golang</li>
-                  <li>PostgreSQL</li>
-                  <li>Hugging Face APIs</li>
-                </ul>
-
-                <div class="work__links">
-                  <a
-                    href="https://github.com/sajidannn/fcp-rg-ai"
-                    class="link__text"
-                    target="_blank"
-                  >
-                    Visit Site <span>&rarr;</span>
-                  </a>
-                  <a
-                    href="https://github.com/sajidannn/fcp-rg-ai"
-                    title="View Source Code"
-                    target="_blank"
-                  >
-                    <img
-                      src="./images/github.svg"
-                      class="work__code"
-                      title="View Source Code"
-                      alt="GitHub"
-                    />
-                  </a>
+        <!-- Skills Section -->
+        <section id="skills">
+            <div class="row">
+                <h2 class="section-title reveal">Tech <span class="highlight">Skills</span></h2>
+                <div class="skills-container reveal">
+                    <div class="skill-badge"><i data-lucide="file-code"></i> <span>JavaScript</span></div>
+                    <div class="skill-badge"><i data-lucide="zap"></i> <span>Golang</span></div>
+                    <div class="skill-badge"><i data-lucide="server"></i> <span>Node.js</span></div>
+                    <div class="skill-badge"><i data-lucide="database"></i> <span>MySQL</span></div>
+                    <div class="skill-badge"><i data-lucide="database-backup"></i> <span>PostgreSQL</span></div>
+                    <div class="skill-badge"><i data-lucide="container"></i> <span>Docker</span></div>
+                    <div class="skill-badge"><i data-lucide="cloud"></i> <span>AWS</span></div>
+                    <div class="skill-badge"><i data-lucide="cloud-rain"></i> <span>GCP</span></div>
                 </div>
-              </div>
-              <div class="work__image-box">
-                <img
-                  src="./images/IoTInsight.png"
-                  class="work__image"
-                  alt="Project 3"
-                />
-              </div>
             </div>
+        </section>
 
-            <div class="work__box">
-              <div class="work__text">
-                <h3>Exni</h3>
-                <p>
-                  Designed and implemented a backend application for managing
-                  corporate assets, including vehicles, buildings, and rental
-                  properties. The system facilitates seamless interaction
-                  between the company and tenants through features such as asset
-                  tracking, leasing management, and payment processing, ensuring
-                  efficient asset utilization and streamlined operations.
-                </p>
-                <ul class="work__list">
-                  <li>Node.js</li>
-                  <li>Express.js</li>
-                  <li>PostgreSQL</li>
-                </ul>
-
-                <div class="work__links">
-                  <a
-                    href="https://exni.web.id/"
-                    class="link__text"
-                    target="_blank"
-                  >
-                    Visit Site <span>&rarr;</span>
-                  </a>
-                  <a
-                    href="https://exni.web.id/"
-                    title="View Source Code"
-                    target="_blank"
-                  >
-                    <img
-                      src="./images/github.svg"
-                      class="work__code"
-                      title="View Source Code"
-                      alt="GitHub"
-                    />
-                  </a>
+        <!-- About Section -->
+        <section id="about">
+            <div class="row">
+                <h2 class="section-title reveal">About <span class="highlight">Me</span></h2>
+                <div class="about__wrapper">
+                    <div class="about__text reveal">
+                        <p>
+                            Enthusiastic computer science student passionate about
+                            programming, cloud computing, and cybersecurity. Focused on
+                            developing web application skills, especially in back-end
+                            technologies.
+                        </p>
+                        <p>
+                             Committed to continuous learning and dedicated to
+                            advancing knowledge and expertise in the field of information
+                            technology.
+                        </p>
+                        <a href="https://drive.google.com/file/d/1o2Oh393lgoMKoafl1pDdrO11JZHmk7hk/view?usp=sharing" target="_blank" class="btn">
+                            Download Resume
+                        </a>
+                    </div>
+                    <div class="about__image-container reveal">
+                         <!-- Using placeholder for visual context -->
+                        <img class="about__image" src="images/me.jpg" alt="Ahmad Nur Sajidan">
+                    </div>
                 </div>
-              </div>
-              <div class="work__image-box">
-                <img
-                  src="./images/exni.jpeg"
-                  class="work__image"
-                  alt="Project 3"
-                />
-              </div>
             </div>
+        </section>
 
-            <div class="work__box">
-              <div class="work__text">
-                <h3>Wound Detection Active Contour</h3>
+        <!-- Contact Section -->
+        <section id="contact" class="contact">
+            <div class="row reveal">
+                <h2 class="section-title">Get In <span class="highlight">Touch</span></h2>
                 <p>
-                  Python program to classify wounds using image segmentation
-                  techniques such as Active Contour and Mask Fill Poly, and a
-                  Decision Tree model for classification.
+                    Need a passionate computer science student skilled in programming? I
+                    specialize in back-end web development, with strong analytical skills.
+                    Have questions or just want to say "Hi"?
                 </p>
-                <ul class="work__list">
-                  <li>Active Contour</li>
-                  <li>Mask Fill Poly</li>
-                  <li>Desicion Tree</li>
-                </ul>
-
-                <div class="work__links">
-                  <a
-                    href="https://colab.research.google.com/drive/15QQ5NpK2WA9k0SeahLutFm3jNkz2oT1t?usp=sharing"
-                    class="link__text"
-                    target="_blank"
-                  >
-                    Visit Site <span>&rarr;</span>
-                  </a>
-                  <a
-                    href="https://colab.research.google.com/drive/15QQ5NpK2WA9k0SeahLutFm3jNkz2oT1t?usp=sharing"
-                    title="View Source Code"
-                    target="_blank"
-                  >
-                    <img
-                      src="./images/googlecolab-svgrepo-com.svg"
-                      class="work__code"
-                      title="View Source Code"
-                      alt="googlecolab"
-                    />
-                  </a>
-                </div>
-              </div>
-              <div class="work__image-box">
-                <img
-                  src="./images/active-contour.jpg"
-                  class="work__image"
-                  alt="Project 3"
-                />
-              </div>
+                <a href="mailto:ahmadnursajidan@gmail.com" class="btn">ahmadnursajidan@gmail.com</a>
             </div>
-
-            <div class="work__box">
-              <div class="work__text">
-                <h3>forumAPI</h3>
-                <p>
-                  This repo is my submission making forumAPI implementing
-                  automation testing with JEST, clean architecture and CI/CD.
-                </p>
-                <ul class="work__list">
-                  <li>Hapi.js</li>
-                  <li>PostgreSql</li>
-                  <li>JEST</li>
-                  <li>Github Action</li>
-                  <li>AWS EC2, S3, RDS</li>
-                </ul>
-
-                <div class="work__links">
-                  <a
-                    href="https://github.com/sajidannn/Dicoding-BE-Expert"
-                    class="link__text"
-                    target="_blank"
-                  >
-                    Visit Site <span>&rarr;</span>
-                  </a>
-                  <a
-                    href="https://github.com/sajidannn/Dicoding-BE-Expert"
-                    title="View Source Code"
-                    target="_blank"
-                  >
-                    <img
-                      src="./images/github.svg"
-                      class="work__code"
-                      title="View Source Code"
-                      alt="GitHub"
-                    />
-                  </a>
-                </div>
-              </div>
-              <div class="work__image-box">
-                <img
-                  src="./images/forumAPI.jpeg"
-                  class="work__image"
-                  alt="Project 1"
-                />
-              </div>
-            </div>
-
-            <div class="work__box">
-              <div class="work__text">
-                <h3>Mustour</h3>
-                <p>
-                  The PKM project entitled Mustour which is a child-friendly
-                  mobile website with marker less AR technology that is
-                  integrated with museums in Indonesia to improve children's
-                  historical and cultural literacy.
-                </p>
-
-                <div class="work__links">
-                  <a
-                    href="https://drive.google.com/file/d/154G7w9OBz3QEp2wMGufdHEZbdlxNSj4c/view?usp=sharing&usp=embed_facebook"
-                    target="_blank"
-                    class="link__text"
-                  >
-                    View Proposal <span>&rarr;</span>
-                  </a>
-                  <a
-                    href="https://www.figma.com/design/0EwnjoNoNNYP8Rm5UZasyn/Mustour?node-id=0-1&p=f"
-                    title="View Design & Prototype"
-                    target="_blank"
-                  >
-                    <img
-                      src="./images/Figma-logo.svg"
-                      class="work__code"
-                      alt="GitHub"
-                    />
-                  </a>
-                </div>
-              </div>
-              <div class="work__image-box">
-                <img
-                  src="./images/mustour.png"
-                  class="work__image"
-                  alt="Project 3"
-                />
-              </div>
-            </div>
-
-            <div class="work__box">
-              <div class="work__text">
-                <h3>NeoSmart</h3>
-                <p>
-                  A Learning plartform to help kids dodging hoaks and fake
-                  informations in social media.
-                </p>
-                <ul class="work__list">
-                  <li>HTML</li>
-                  <li>CSS</li>
-                  <li>JavaScript</li>
-                </ul>
-
-                <div class="work__links">
-                  <a
-                    href="https://neosmart2.netlify.app/"
-                    target="_blank"
-                    class="link__text"
-                  >
-                    Visit Site <span>&rarr;</span>
-                  </a>
-                  <a
-                    href="https://github.com/sajidannn/submission-dicoding-FE"
-                    title="View Source Code"
-                    target="_blank"
-                  >
-                    <img
-                      src="./images/github.svg"
-                      class="work__code"
-                      alt="GitHub"
-                    />
-                  </a>
-                </div>
-              </div>
-              <div class="work__image-box">
-                <img
-                  src="./images/neosmart.jpg"
-                  class="work__image"
-                  alt="Project 3"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ***** Skills ***** -->
-
-      <section class="skill" id="skills">
-        <div class="row">
-          <h2>Skills</h2>
-          <div class="skill__logos">
-            <img
-              src="./images/icons8-javascript.svg"
-              class="skill__logo"
-              title="JavaScript"
-              alt="JavaScript"
-            />
-            <img
-              src="./images/icons8-golang.svg"
-              class="skill__logo"
-              title="Golang"
-              alt="Golang"
-            />
-            <img
-              src="./images/icons8-nodejs.svg"
-              class="skill__logo"
-              title="nodejs"
-              alt="nodejs"
-            />
-            <img
-              src="./images/icons8-mysql.svg"
-              class="skill__logo"
-              title="MySql"
-              alt="MySql"
-            />
-            <img
-              src="./images/icons8-postgresql.svg"
-              class="skill__logo"
-              title="PostgreSql"
-              alt="PostgreSql"
-            />
-            <img
-              src="./images/icons8-docker.svg"
-              class="skill__logo"
-              title="Docker"
-              alt="Docker"
-            />
-            <img
-              src="./images/icons8-aws.svg"
-              class="skill__logo"
-              title="AWS"
-              alt="AWS"
-            />
-            <img
-              src="./images/icons8-google-cloud.svg"
-              class="skill__logo"
-              title="GCP"
-              alt="GCP"
-            />
-          </div>
-        </div>
-      </section>
-
-      <!-- ***** About ***** -->
-
-      <section class="about" id="about">
-        <div class="row">
-          <h2>About Me</h2>
-          <div class="about__content">
-            <div class="about__text">
-              <!-- Replace the below paragraph with info about yourself -->
-              <p>
-                Enthusiastic computer science student passionate about
-                programming, cloud computing, and cybersecurity. Focused on
-                developing web application skills, especially in back-end
-                technologies. Committed to continuous learning and dedicated to
-                advancing knowledge and expertise in the field of information
-                technology.
-              </p>
-              <!-- Provide a link to your resume -->
-              <a
-                href="https://drive.google.com/file/d/1ecLJl7XEFwMc8Jvkt5tf1n71cv4trZwh/view"
-                target="_blank"
-                class="btn"
-                >My Resume</a
-              >
-            </div>
-
-            <div class="about__photo-container">
-              <!-- Add a nice photo of yourself -->
-              <img class="about__photo" src="./images/about2.jpg" alt="" />
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
     </main>
 
-    <!-- ***** Contact ***** -->
-
-    <section class="contact" id="contact">
-      <div class="row">
-        <h2>Get in Touch</h2>
-        <div class="contact__info">
-          <p>
-            Need a passionate computer science student skilled in programming? I
-            specialize in back-end web development, with strong analytical,
-            problem-solving, and time management skills. Have questions, need
-            advice, or just want to say "Hi 👋"? Feel free to reach out via
-            email. I'll respond as quickly as possible! 😊
-          </p>
-          <a href="mailto:ahmadnursajidan@gmail.com" class="btn"
-            >ahmadnursajidan@gmail.com</a
-          >
+    <footer class="footer">
+        <div class="row">
+            <div class="social-links">
+                <a href="https://github.com/sajidannn" title="Github"><i data-lucide="github"></i></a>
+                <a href="https://www.instagram.com/_sajidannn/" title="Instagram"><i data-lucide="instagram"></i></a>
+                <a href="https://www.linkedin.com/in/ahmad-nur-sajidan-19444724b/" title="LinkedIn"><i data-lucide="linkedin"></i></a>
+                <a href="https://www.codewars.com/users/sajidannn" title="CodeWars"><i data-lucide="terminal"></i></a>
+                <a href="https://strava.app.link/xOrGr0sOh0b" title="Strava"><i data-lucide="activity"></i></a>
+            </div>
+            <p>&copy; 2026 Developed by Ahmad Nur Sajidan. System Operational.</p>
         </div>
-      </div>
-    </section>
-
-    <!-- ***** Footer ***** -->
-
-    <footer role="contentinfo" class="footer">
-      <div class="row">
-        <ul class="footer__social-links">
-          <li class="footer__social-link-item">
-            <a
-              href="https://github.com/sajidannn"
-              title="Link to Github Profile"
-            >
-              <img
-                src="./images/github.svg"
-                class="footer__social-image"
-                alt="Github"
-              />
-            </a>
-          </li>
-          <li class="footer__social-link-item">
-            <a
-              href="https://www.instagram.com/_sajidannn/"
-              title="Link to Instagram Profile"
-            >
-              <img
-                src="./images/icons8-instagram.svg"
-                class="footer__social-image"
-                alt="Instagram"
-              />
-            </a>
-          </li>
-          <li class="footer__social-link-item">
-            <a href="https://www.linkedin.com/in/ahmad-nur-sajidan-19444724b/">
-              <img
-                src="./images/linkedin.svg"
-                title="Link to Linkedin Profile"
-                class="footer__social-image"
-                alt="Linkedin"
-              />
-            </a>
-          </li>
-          <li class="footer__social-link-item">
-            <a
-              href="https://www.codewars.com/users/sajidannn"
-              title="Link to Codewars Profile"
-            >
-              <img
-                src="./images/codewars-svgrepo-com.svg"
-                class="footer__social-image"
-                alt="Codewars"
-              />
-            </a>
-          </li>
-          <li class="footer__social-link-item">
-            <a
-              href="https://strava.app.link/xOrGr0sOh0b"
-              title="Link to Strava Profile"
-            >
-              <img
-                src="./images/strava-svgrepo-com.svg"
-                class="footer__social-image"
-                alt="Strava"
-              />
-            </a>
-          </li>
-        </ul>
-        <p>&copy; 2026 Made with ❤️ by Ahmad Nur Sajidan.</p>
-      </div>
     </footer>
 
     <a href="#top" class="back-to-top" title="Back to Top">
-      <img
-        src="./images/arrow-up.svg"
-        alt="Back to Top"
-        class="back-to-top__image"
-      />
+        <i data-lucide="arrow-up"></i>
     </a>
-    <script src="./index.js"></script>
-  </body>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        /* ---------------------------------------------------- */
+        /* Logic: Custom Cursor */
+        /* ---------------------------------------------------- */
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+
+        // Only activate custom cursor on non-touch devices
+        if (window.matchMedia("(pointer: fine)").matches) {
+            window.addEventListener('mousemove', (e) => {
+                const posX = e.clientX;
+                const posY = e.clientY;
+
+                // Dot follows immediately
+                cursorDot.style.left = `${posX}px`;
+                cursorDot.style.top = `${posY}px`;
+
+                // Outline follows with slight delay using animate
+                cursorOutline.animate({
+                    left: `${posX}px`,
+                    top: `${posY}px`
+                }, { duration: 500, fill: "forwards" });
+            });
+
+            // Hover effect on clickable elements
+            const clickables = document.querySelectorAll('a, button, .project-card, .skill-badge');
+            clickables.forEach(el => {
+                el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+                el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+            });
+        }
+
+        /* ---------------------------------------------------- */
+        /* Logic: Typing Effect */
+        /* ---------------------------------------------------- */
+        const textElement = document.querySelector(".typing-text");
+        const texts = ["Web Developer", "Back-end Engineer", "Cloud Enthusiast", "Problem Solver"];
+        let count = 0;
+        let index = 0;
+        let currentText = "";
+        let letter = "";
+
+        (function type() {
+            if (count === texts.length) {
+                count = 0;
+            }
+            currentText = texts[count];
+            letter = currentText.slice(0, ++index);
+
+            textElement.textContent = letter;
+
+            if (letter.length === currentText.length) {
+                setTimeout(() => {
+                    // Erase effect could go here, but let's simple cycle
+                    count++;
+                    index = 0;
+                    setTimeout(type, 1500); // Pause before next word
+                }, 500);
+            } else {
+                setTimeout(type, 100);
+            }
+        })();
+
+        /* ---------------------------------------------------- */
+        /* Logic: Scroll Reveal */
+        /* ---------------------------------------------------- */
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const revealOnScroll = () => {
+            const windowHeight = window.innerHeight;
+            const elementVisible = 150;
+
+            revealElements.forEach((reveal) => {
+                const elementTop = reveal.getBoundingClientRect().top;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveal.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', revealOnScroll);
+        // Trigger once on load
+        revealOnScroll();
+
+        /* ---------------------------------------------------- */
+        /* Logic: 3D Tilt for Cards */
+        /* ---------------------------------------------------- */
+        const cards = document.querySelectorAll('.project-card');
+
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                // Calculate center
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                // Rotation values (max 15deg)
+                const rotateX = ((y - centerY) / centerY) * -5;
+                const rotateY = ((x - centerX) / centerX) * 5;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0) rotateY(0)`;
+            });
+        });
+
+        /* ---------------------------------------------------- */
+        /* Logic: Back to Top */
+        /* ---------------------------------------------------- */
+        const backToTopBtn = document.querySelector('.back-to-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTopBtn.classList.add('active');
+            } else {
+                backToTopBtn.classList.remove('active');
+            }
+        });
+
+        /* ---------------------------------------------------- */
+        /* Logic: Particle Background (Canvas) */
+        /* ---------------------------------------------------- */
+        const canvas = document.getElementById('particles-js');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray;
+
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+                this.color = color;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = '#ff3258';
+                ctx.fill();
+            }
+
+            update() {
+                if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
+                if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
+
+                this.x += this.directionX;
+                this.y += this.directionY;
+                this.draw();
+            }
+        }
+
+        function init() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2) + 1;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 0.4) - 0.2;
+                let directionY = (Math.random() * 0.4) - 0.2;
+                let color = '#ff3258';
+
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        function connect() {
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) +
+                                   ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    if (distance < (canvas.width / 7) * (canvas.height / 7)) {
+                        opacityValue = 1 - (distance / 20000);
+                        ctx.strokeStyle = 'rgba(120, 120, 120,' + opacityValue + ')';
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+            connect();
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = innerWidth;
+            canvas.height = innerHeight;
+            init();
+        });
+
+        init();
+        animate();
+
+    </script>
+</body>
 </html>
