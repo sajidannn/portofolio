@@ -1,0 +1,47 @@
+---
+import "../styles/global.css";
+
+interface Props {
+    title?: string;
+    description?: string;
+}
+
+const {
+    title = "Sajidan | Portfolio",
+    description = "Web Developer | Back-end Developer | Cloud Computing",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="shortcut icon" type="image/png" href="/images/favicon.png" />
+        <title>{title}</title>
+        <meta name="description" content={description} />
+
+        <!-- Google Fonts for Futuristic Look -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap"
+            rel="stylesheet"
+        />
+
+        <!-- Lucide Icons -->
+        <script src="https://unpkg.com/lucide@latest"></script>
+    </head>
+    <body>
+        <slot />
+
+        <script is:inline>
+            // Inisialisasi Lucide icons setelah DOM terload
+            document.addEventListener("DOMContentLoaded", () => {
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            });
+        </script>
+    </body>
+</html>

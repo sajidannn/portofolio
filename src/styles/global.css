@@ -399,10 +399,17 @@ section {
     font-weight: 500;
 }
 
-.skill-badge svg {
+.skill-badge svg,
+.skill-badge img {
     width: 24px;
     height: 24px;
-    stroke: var(--primary);
+    object-fit: contain;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.skill-badge:hover img,
+.skill-badge:hover svg {
+    transform: scale(1.15);
 }
 
 /* --------------------------------------- */

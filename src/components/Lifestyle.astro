@@ -1,0 +1,61 @@
+---
+import { lifestyleActivities } from "../data/lifestyle";
+---
+
+<section id="activities">
+    <div class="row">
+        <h2 class="section-title reveal">
+            Active <span class="highlight">Lifestyle</span>
+        </h2>
+        <p class="section-subtitle reveal">
+            Beyond coding, I build endurance, focus, and resilience through
+            endurance sports. Track my journeys and connect with me on Strava!
+        </p>
+
+        <div class="lifestyle__grid">
+            {
+                lifestyleActivities.map((activity) => (
+                    <div class="project-card lifestyle-card reveal">
+                        <div
+                            class={`lifestyle-card__gallery ${activity.photos.length === 1 ? "single" : ""}`}
+                        >
+                            {activity.photos.map((photo) => (
+                                <div
+                                    class="lifestyle-card__photo"
+                                    style={`background: url('${photo.url}') center/cover;`}
+                                >
+                                    <span class="pb-chip">{photo.label}</span>
+                                </div>
+                            ))}
+                        </div>
+                        <div class="lifestyle-card__header">
+                            <div class="lifestyle-card__icon-wrapper">
+                                <i data-lucide={activity.icon} />
+                            </div>
+                            <div>
+                                <h3>{activity.title}</h3>
+                                <p class="lifestyle-card__tagline">
+                                    {activity.tagline}
+                                </p>
+                            </div>
+                        </div>
+                        <p>{activity.description}</p>
+                        <div class="lifestyle-card__badge">
+                            {activity.badge}
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+
+        <div class="strava-cta reveal">
+            <a
+                href="https://strava.app.link/xOrGr0sOh0b"
+                target="_blank"
+                class="btn strava-btn"
+            >
+                <i data-lucide="activity"></i> Connect on Strava
+            </a>
+        </div>
+    </div>
+</section>

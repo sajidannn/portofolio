@@ -1,0 +1,29 @@
+---
+import { skills } from "../data/skills";
+---
+
+<section id="skills">
+    <div class="row">
+        <h2 class="section-title reveal">
+            Tech <span class="highlight">Skills</span>
+        </h2>
+        <div class="skills-container reveal">
+            {
+                skills.map((skill) => (
+                    <div class="skill-badge">
+                        <img 
+                            src={skill.icon} 
+                            alt={skill.name} 
+                            class="skill-icon" 
+                            width="24" 
+                            height="24" 
+                            loading="lazy" 
+                            decoding="async" 
+                        />
+                        <span>{skill.name}</span>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
